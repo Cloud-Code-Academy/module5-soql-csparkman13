@@ -16,7 +16,7 @@
  * Users of this class can expect to gain a solid understanding of SOQL in Apex and
  * be prepared to handle data retrieval tasks in Salesforce development.
  *
- * @author Your Name
+ * @author Christine Sparkman
  */
 
 public with sharing class SOQL {
@@ -27,9 +27,13 @@ public with sharing class SOQL {
 	 * @return List of all leads with Id, LastName, Company, Phone, Email
 	 * Update the corresponding test class and testGetAllLeads method to cover this method
 	 */
-	//[public | private ] [static] data_type method_name (input parameters) {
-	//  The body of the method
-	//}
+	public static List<Lead> getAllLeads() {
+		// The body of the method
+		return [
+			SELECT Id, LastName, Company, Phone, Email
+			FROM Lead
+		];
+	}
 
 	/**
 	 * Question 2
@@ -38,9 +42,14 @@ public with sharing class SOQL {
 	 * @return A list of Contact records.
 	 * Update the corresponding test class and testGetContactsByFirstName method to cover this method
 	 */
-	//[public | private ] [static] data_type method_name (input parameters) {
-	//  The body of the method
-	//}
+	public static List<Contact> getContacts() {
+		// The body of the method
+		return [
+			SELECT Id, FirstName, LastName, Name, Phone, Email
+			FROM Contact
+			WHERE FirstName = 'John'
+		];
+	}
 
 	/**
 	 * Question 3
@@ -49,9 +58,18 @@ public with sharing class SOQL {
 	 * @return A list of Contact Ids.
 	 * Update the corresponding test class and testGetContactIdsByLastName method to cover this method
 	 */
-	//[public | private ] [static] data_type method_name (input parameters) {
-	//  The body of the method
-	//}
+	public static List<Id> contactIds() {
+		// The body of the method
+		List<Id> contactIds = new List<Id>();
+		for (Contact c : [
+			SELECT Id
+			FROM Contact
+			WHERE LastName IN ('Smith', 'Jones')
+		]) {
+			contactIds.add(c.Id);
+		}
+		return contactIds;
+	}
 
 	/**
 	 * Question 4
@@ -62,9 +80,17 @@ public with sharing class SOQL {
 	 * @return A list of Opportunities with important opportunities fields
 	 * Update the corresponding test class and testGetClosedWonOpportunityCountByAccount method to cover this method
 	 */
-	//[public | private ] [static] data_type method_name (input parameters) {
-	//  The body of the method
-	//}
+	public static List<Opportunity> getClosedWonOpps(String accountId) {
+		// The body of the method
+		if (String.isBlank(accountId)) {
+			return new List<Opportunity>();
+		}
+		return [
+			SELECT Id, Name, StageName, CloseDate, Amount, AccountId
+			FROM Opportunity
+			WHERE StageName = 'Closed Won' AND AccountId = :accountId
+		];
+	}
 
 	/**
 	 * Question 5
